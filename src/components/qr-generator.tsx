@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -23,9 +24,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { IndianRupee, QrCode } from "lucide-react";
+import { IndianRupee, QrCode, Share2 } from "lucide-react";
 import { UPI_ID, PAYEE_NAME } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   amount: z.coerce
@@ -37,6 +39,7 @@ const formSchema = z.object({
 export function QrGenerator() {
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [displayAmount, setDisplayAmount] = useState<number | null>(null);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,6 +65,44 @@ export function QrGenerator() {
     setQrCodeUrl(null);
     setDisplayAmount(null);
     form.reset();
+  }
+
+  async function shareQrCode() {
+    if (!qrCodeUrl || !displayAmount) return;
+  
+    try {
+      // Fetch the QR code image
+      const response = await fetch(qrCodeUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch QR code image.");
+      }
+      const blob = await response.blob();
+      const file = new File([blob], "upi-qr-code.png", { type: "image/png" });
+  
+      const shareData = {
+        files: [file],
+        title: "Scan to Pay",
+        text: `Scan this QR code to pay ₹${displayAmount.toLocaleString("en-IN")} to ${PAYEE_NAME}.`,
+      };
+  
+      if (navigator.canShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Sharing not supported",
+          description: "Your browser does not support sharing files.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing QR code:", error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description:
+          error instanceof Error ? error.message : "Could not share the QR code.",
+      });
+    }
   }
 
   return (
@@ -106,10 +147,16 @@ export function QrGenerator() {
               </div>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-              <Button onClick={handleNewPayment} className="w-full" size="lg">
-                Create New Payment
-              </Button>
-              <p className="text-xs text-muted-foreground">
+               <div className="flex w-full gap-2">
+                <Button onClick={handleNewPayment} className="w-full" size="lg" variant="outline">
+                  New Payment
+                </Button>
+                <Button onClick={shareQrCode} className="w-full" size="lg">
+                  <Share2 className="mr-2 h-5 w-5" />
+                  Share
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground pt-2">
                 Paying to: {PAYEE_NAME} ({UPI_ID})
               </p>
             </CardFooter>
