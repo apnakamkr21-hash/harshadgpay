@@ -232,7 +232,7 @@ export function QrGenerator() {
             >
               <CardHeader className="text-center">
                 <CardTitle className="text-3xl font-headline flex items-center justify-center gap-2">
-                  croissant one
+                  InstaPay QR
                 </CardTitle>
                 <CardDescription>
                   Enter an amount to generate a payment QR code.
