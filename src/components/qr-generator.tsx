@@ -157,7 +157,7 @@ export function QrGenerator() {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground pt-2">
-                Paying to: {PAYEE_NAME} (8530378745)
+                Paying to: {PAYEE_NAME}
               </p>
             </CardFooter>
           </motion.div>
@@ -225,7 +225,7 @@ export function QrGenerator() {
             </CardContent>
              <CardFooter className="justify-center">
               <p className="text-xs text-muted-foreground">
-                Payments will be sent to 8530378745
+                Payments will be sent to {PAYEE_NAME}
               </p>
             </CardFooter>
           </motion.div>
