@@ -1,2 +1,2 @@
-export const UPI_ID = 'aditya@upi';
-export const PAYEE_NAME = 'Aditya';
+export const UPI_ID = 'harshadshewale213@okhdfcbank';
+export const PAYEE_NAME = 'Harshad Shewale';
