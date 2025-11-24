@@ -2,7 +2,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { IndianRupee, Lock } from "lucide-react";
-import { PAYEE_NAME, UPI_ID } from "@/lib/constants";
+import { UPI_ID, PAYEE_NAME } from "@/lib/constants";
 
 interface QrShareCardProps extends React.HTMLAttributes<HTMLDivElement> {
   qrCodeUrl: string;

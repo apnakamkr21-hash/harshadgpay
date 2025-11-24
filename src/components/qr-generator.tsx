@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -25,11 +25,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { IndianRupee, QrCode, Share2 } from "lucide-react";
+import { IndianRupee, QrCode, Share2, History, Trash2 } from "lucide-react";
 import { UPI_ID, PAYEE_NAME } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { QrShareCard } from "./qr-share-card";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+} from "@/components/ui/sheet";
+import { ScrollArea } from "./ui/scroll-area";
+import { Separator } from "./ui/separator";
+import { format } from "date-fns";
 
 const formSchema = z.object({
   amount: z.coerce
@@ -38,12 +49,33 @@ const formSchema = z.object({
     .max(100000, { message: "Amount cannot exceed ₹1,00,000." }),
 });
 
+export type Payment = {
+  id: string;
+  amount: number;
+  date: string;
+};
+
 export function QrGenerator() {
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [displayAmount, setDisplayAmount] = useState<number | null>(null);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [paymentHistory, setPaymentHistory] = useState<Payment[]>([]);
   const { toast } = useToast();
   const shareCardRef = useRef<HTMLDivElement>(null);
 
+
+  useEffect(() => {
+    // Ensure this runs only on the client
+    try {
+      const storedHistory = localStorage.getItem("paymentHistory");
+      if (storedHistory) {
+        setPaymentHistory(JSON.parse(storedHistory));
+      }
+    } catch (error) {
+      console.error("Failed to parse payment history from localStorage", error);
+      setPaymentHistory([]);
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,12 +95,31 @@ export function QrGenerator() {
     )}&qzone=1&margin=0`;
     setQrCodeUrl(qrApiUrl);
     setDisplayAmount(values.amount);
+
+    // Save to history
+    const newPayment: Payment = {
+      id: new Date().toISOString(),
+      amount: values.amount,
+      date: new Date().toISOString(),
+    };
+    const updatedHistory = [newPayment, ...paymentHistory];
+    setPaymentHistory(updatedHistory);
+    localStorage.setItem("paymentHistory", JSON.stringify(updatedHistory));
   }
 
   function handleNewPayment() {
     setQrCodeUrl(null);
     setDisplayAmount(null);
     form.reset();
+  }
+
+  function clearHistory() {
+    setPaymentHistory([]);
+    localStorage.removeItem("paymentHistory");
+    toast({
+      title: "History Cleared",
+      description: "Your payment history has been successfully cleared.",
+    });
   }
 
   async function shareQrCode() {
@@ -91,10 +142,16 @@ export function QrGenerator() {
       if (navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData);
       } else {
+        // Fallback for browsers that don't support sharing files
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = 'upi-qr-payment.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         toast({
-          variant: "destructive",
-          title: "Sharing not supported",
-          description: "Your browser does not support sharing files.",
+          title: "Image Saved",
+          description: "Sharing not supported, QR code image saved to your downloads.",
         });
       }
     } catch (error) {
@@ -110,7 +167,7 @@ export function QrGenerator() {
 
   return (
     <>
-      <Card className="w-full max-w-md shadow-2xl bg-card/80 backdrop-blur-sm">
+      <Card className="w-full max-w-md shadow-2xl bg-card/80 backdrop-blur-sm border-0">
         <AnimatePresence mode="wait">
           {qrCodeUrl && displayAmount ? (
             <motion.div
@@ -227,10 +284,14 @@ export function QrGenerator() {
                   </form>
                 </Form>
               </CardContent>
-               <CardFooter className="justify-center">
+               <CardFooter className="flex flex-col gap-4 justify-center">
                 <p className="text-xs text-muted-foreground">
                   Payments will be sent to {PAYEE_NAME}
                 </p>
+                <Button variant="ghost" size="sm" onClick={() => setIsHistoryOpen(true)}>
+                  <History className="mr-2 h-4 w-4" />
+                  View Payment History
+                </Button>
               </CardFooter>
             </motion.div>
           )}
@@ -248,6 +309,53 @@ export function QrGenerator() {
           />
         )}
       </div>
+
+      <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+        <SheetContent className="flex flex-col">
+          <SheetHeader>
+            <SheetTitle>Payment History</SheetTitle>
+            <SheetDescription>
+              Here is a list of your past payment QR codes.
+            </SheetDescription>
+          </SheetHeader>
+          <Separator />
+          {paymentHistory.length > 0 ? (
+            <ScrollArea className="flex-grow">
+              <div className="flex flex-col gap-4 py-4 pr-4">
+                {paymentHistory.map((payment) => (
+                  <div key={payment.id} className="flex items-center justify-between p-3 rounded-lg bg-secondary">
+                    <div>
+                      <p className="font-semibold text-secondary-foreground text-lg">
+                        ₹{payment.amount.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(payment.date), "PPP p")}
+                      </p>
+                    </div>
+                     <QrCode className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          ) : (
+             <div className="flex-grow flex flex-col items-center justify-center text-center gap-4">
+              <History className="h-16 w-16 text-muted-foreground/30" />
+              <p className="text-muted-foreground">No payment history yet.</p>
+              <p className="text-xs text-muted-foreground/80">Generated QR codes will appear here.</p>
+            </div>
+          )}
+           <SheetFooter>
+            {paymentHistory.length > 0 && (
+              <Button variant="destructive" onClick={clearHistory} className="w-full">
+                <Trash2 className="mr-2 h-4 w-4" /> Clear History
+              </Button>
+            )}
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </>
   );
 }
