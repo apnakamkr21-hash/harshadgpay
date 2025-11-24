@@ -60,7 +60,7 @@ export function QrGenerator() {
     )}`;
     const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
       upiUrl
-    )}`;
+    )}&qzone=1&margin=0`;
     setQrCodeUrl(qrApiUrl);
     setDisplayAmount(values.amount);
   }
