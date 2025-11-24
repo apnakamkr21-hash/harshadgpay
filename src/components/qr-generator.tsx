@@ -110,7 +110,7 @@ export function QrGenerator() {
 
   return (
     <>
-      <Card className="w-full max-w-md shadow-2xl bg-card/80 backdrop-blur-sm border-2">
+      <Card className="w-full max-w-md shadow-2xl bg-card/80 backdrop-blur-sm">
         <AnimatePresence mode="wait">
           {qrCodeUrl && displayAmount ? (
             <motion.div
