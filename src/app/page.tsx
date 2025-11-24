@@ -12,7 +12,7 @@ export default function Home() {
           src={bgImage.imageUrl}
           alt="Abstract background image"
           fill
-          className="object-cover -z-20"
+          className="object-cover -z-20 animate-bg-pan-zoom"
           data-ai-hint={bgImage.imageHint}
         />
       )}
