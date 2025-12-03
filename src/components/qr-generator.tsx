@@ -252,12 +252,12 @@ export function QrGenerator() {
                           <FormLabel className="sr-only">Amount</FormLabel>
                           <FormControl>
                             <div className="relative">
-                              <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
+                              <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-black" />
                               <Input
                                 type="number"
                                 placeholder="0.00"
                                 {...field}
-                                className="pl-14 pr-4 text-4xl font-headline h-20 text-center rounded-xl shadow-inner bg-transparent border-white/45 placeholder:text-[#E0CCFF] focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                                className="pl-14 pr-4 text-4xl font-headline h-20 text-center rounded-xl shadow-inner bg-white border-white/45 placeholder:text-gray-400 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background text-black"
                                 step="0.01"
                                 onChange={(e) => {
                                   const value = e.target.value;
@@ -359,5 +359,7 @@ export function QrGenerator() {
     </>
   );
 }
+
+    
 
     
