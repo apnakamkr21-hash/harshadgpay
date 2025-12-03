@@ -167,7 +167,7 @@ export function QrGenerator() {
 
   return (
     <>
-      <Card className="w-full max-w-md shadow-2xl bg-card/80 backdrop-blur-sm border-0">
+      <Card className="w-full max-w-md shadow-2xl bg-white/[.18] backdrop-blur-md border-white/20">
         <AnimatePresence mode="wait">
           {qrCodeUrl && displayAmount ? (
             <motion.div
@@ -234,7 +234,7 @@ export function QrGenerator() {
                 <CardTitle className="text-3xl font-headline flex items-center justify-center gap-2 text-white">
                   Aditya's QR
                 </CardTitle>
-                <CardDescription className="text-white/80">
+                <CardDescription className="text-[#E6E6E6]">
                   Enter an amount to generate a payment QR code.
                 </CardDescription>
               </CardHeader>
@@ -257,7 +257,7 @@ export function QrGenerator() {
                                 type="number"
                                 placeholder="0.00"
                                 {...field}
-                                className="pl-14 pr-4 text-4xl font-headline h-20 text-center rounded-xl shadow-inner bg-background/50 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                                className="pl-14 pr-4 text-4xl font-headline h-20 text-center rounded-xl shadow-inner bg-transparent border-white/45 placeholder:text-[#E0CCFF] focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                                 step="0.01"
                                 onChange={(e) => {
                                   const value = e.target.value;
@@ -274,7 +274,7 @@ export function QrGenerator() {
                     />
                     <Button
                       type="submit"
-                      className="w-full text-lg h-14"
+                      className="w-full text-lg h-14 bg-[#8A2BE2] hover:bg-[#9C3AF0] text-white"
                       size="lg"
                       disabled={form.formState.isSubmitting}
                     >
@@ -285,10 +285,10 @@ export function QrGenerator() {
                 </Form>
               </CardContent>
                <CardFooter className="flex flex-col gap-4 justify-center">
-                <p className="text-xs text-white/70">
+                <p className="text-xs text-[#EAEAEA]">
                   Payments will be sent to {PAYEE_NAME}
                 </p>
-                <Button variant="ghost" size="sm" onClick={() => setIsHistoryOpen(true)} className="text-white/90 hover:text-white hover:bg-white/10">
+                <Button variant="ghost" size="sm" onClick={() => setIsHistoryOpen(true)} className="text-[#F6F0FF] hover:text-white hover:bg-white/10">
                   <History className="mr-2 h-4 w-4" />
                   View Payment History
                 </Button>
