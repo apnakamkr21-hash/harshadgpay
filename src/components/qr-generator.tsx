@@ -186,7 +186,7 @@ export function QrGenerator() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center gap-4">
-                <div className="p-4 bg-white rounded-lg shadow-inner">
+                <div className="p-4 bg-blue-100 rounded-lg shadow-inner">
                   <Image
                     src={qrCodeUrl}
                     alt="UPI QR Code"
@@ -359,3 +359,5 @@ export function QrGenerator() {
     </>
   );
 }
+
+    
