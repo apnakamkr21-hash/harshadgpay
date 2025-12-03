@@ -178,10 +178,10 @@ export function QrGenerator() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-headline">
+                <CardTitle className="text-2xl font-headline text-white">
                   Scan & Pay
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-white/80">
                   Use any UPI app to scan the QR code below.
                 </CardDescription>
               </CardHeader>
@@ -231,10 +231,10 @@ export function QrGenerator() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-headline flex items-center justify-center gap-2">
+                <CardTitle className="text-3xl font-headline flex items-center justify-center gap-2 text-white">
                   Aditya's QR
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-white/80">
                   Enter an amount to generate a payment QR code.
                 </CardDescription>
               </CardHeader>
@@ -285,10 +285,10 @@ export function QrGenerator() {
                 </Form>
               </CardContent>
                <CardFooter className="flex flex-col gap-4 justify-center">
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-white/70">
                   Payments will be sent to {PAYEE_NAME}
                 </p>
-                <Button variant="ghost" size="sm" onClick={() => setIsHistoryOpen(true)}>
+                <Button variant="ghost" size="sm" onClick={() => setIsHistoryOpen(true)} className="text-white/90 hover:text-white hover:bg-white/10">
                   <History className="mr-2 h-4 w-4" />
                   View Payment History
                 </Button>
