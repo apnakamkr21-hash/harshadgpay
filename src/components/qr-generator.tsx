@@ -231,7 +231,7 @@ export function QrGenerator() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-headline flex items-center justify-center gap-2 text-white">
+                <CardTitle className="text-3xl font-headline flex items-center justify-center gap-2 text-black">
                   Aditya's QR
                 </CardTitle>
                 <CardDescription className="text-[#E6E6E6]">
