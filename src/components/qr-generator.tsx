@@ -257,7 +257,7 @@ export function QrGenerator() {
                                 type="number"
                                 placeholder="0.00"
                                 {...field}
-                                className="pl-14 pr-4 text-5xl font-headline h-20 text-center rounded-xl shadow-inner bg-white border-white/45 placeholder:text-gray-400 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background text-black"
+                                className="pl-14 pr-4 text-6xl font-headline h-20 text-center rounded-xl shadow-inner bg-white border-white/45 placeholder:text-gray-400 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background text-black"
                                 step="0.01"
                                 onChange={(e) => {
                                   const value = e.target.value;
